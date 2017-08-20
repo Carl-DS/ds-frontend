@@ -47,9 +47,20 @@ tsconfig.json, Typescript语言的配置文件
 
 ## Angular 英雄指南教程
 1. 简介 done
+
 2. 英雄编辑器 done
+
 3. 主从结构 done
-4. 多个组件
-5. 服务
+
+4. 多个组件 done 
+
+5. 服务 done 困难
+
+  5.1 @Injectable 导入Angular 的Injectable 函数, 并作为@Injectable() 装饰器使用这个函数
+  
+  5.2 不要忘了写圆括号!
+  
+  5.3 当 TypeScript 看到@Injectable()装饰器时，就会记下本服务的元数据。 如果 Angular 需要往这个服务中注入其它依赖，就会使用这些元数据。
+
 6. 路由
 7. HTTP

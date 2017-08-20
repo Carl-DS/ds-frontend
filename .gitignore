@@ -1,0 +1,7 @@
+.vscode/settings.json
+.DS_Store
+.idea/ds-frontend.iml
+.idea/modules.xml
+.idea/typescript-compiler.xml
+.idea/vcs.xml
+.idea/workspace.xml

@@ -1,19 +1,7 @@
-import { Component, Input } from '@angular/core'; // 引用系统类库 @angular/core
-import { Hero } from './hello'; // 引用定义的Hero 类
+import {Component, Input, OnInit} from '@angular/core'; // 引用系统类库 @angular/core
 
-// 英雄列表
-const HEROES: Hero[] = [
-  { id: 11, name: 'Mr. Nice' },
-  { id: 12, name: 'Narco' },
-  { id: 13, name: 'Bombasto' },
-  { id: 14, name: 'Celeritas' },
-  { id: 15, name: 'Magneta' },
-  { id: 16, name: 'RubberMan' },
-  { id: 17, name: 'Dynama' },
-  { id: 18, name: 'Dr IQ' },
-  { id: 19, name: 'Magma' },
-  { id: 20, name: 'Tornado' }
-];
+import { Hero } from './hello'; // 引用定义的Hero 类
+import { HeroService } from "./hero.service";
 
 @Component({ // 定义组件
   selector: 'app-root', // 对应该index.html的 <app-root> 标签
@@ -30,14 +18,30 @@ const HEROES: Hero[] = [
     </ul>
     
     <hero-detail [hero]="selectedHero"></hero-detail>
-  ` // 替换<app-root> 标签的内容
+  `, // 替换<app-root> 标签的内容
+  providers: [HeroService]
 })
 
-export class AppComponent { // 输出自定义组件
+export class AppComponent implements OnInit{ // 输出自定义组件
   title = 'Tour of Heroes';
-  heroes = HEROES;
-  selectedHero : Hero;
+  heroes: Hero[];
+  selectedHero: Hero;
+  constructor(private heroService: HeroService) {}
+
+  getHeroes(): void {
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+
+  ngOnInit(): void {
+    this.getHeroes();
+    // this.getHeroesSlowly();
+  }
+
+  getHeroesSlowly(): void {
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
-  }
+  };
 }

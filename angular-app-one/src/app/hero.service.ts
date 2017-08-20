@@ -1,0 +1,18 @@
+import { Component, Injectable } from "@angular/core";
+
+import { Hero } from "./hello";
+import { HEROES} from "./mock-heroes";
+
+@Injectable() // 当TypeScript 看到@Injectable 装饰品时, 就会记下本服务的元数据
+export class HeroService {
+  getHeroes(): Promise<Hero[]> {
+    return Promise.resolve(HEROES);
+  };
+  // 模拟慢速连接
+  getHeroesSlowly(): Promise<Hero[]> {
+    return new Promise(resolve => {
+      // 这个承诺会提供模拟数据之前等待2 秒
+      setTimeout(() => resolve(this.getHeroes()), 15000);
+    });
+  }
+}
