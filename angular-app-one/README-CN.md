@@ -63,4 +63,21 @@ tsconfig.json, Typescript语言的配置文件
   5.3 当 TypeScript 看到@Injectable()装饰器时，就会记下本服务的元数据。 如果 Angular 需要往这个服务中注入其它依赖，就会使用这些元数据。
 
 6. 路由
+
+  6.1 路由定义包括以下部分:
+  * Path: 路由器会用它来匹配浏览器地址栏中的地址, 如heroes.
+  * Component: 导航到此路由时, 路由器需要创建的组件(HeroesComponent)
+  ```
+    import { RouterModule }   from '@angular/router';
+
+    RouterModule.forRoot([
+      {
+        path: 'heroes',
+        component: HeroesComponent
+      }
+    ])
+  ```
+  * 这里使用了 forRoot() 方法, 因为我们是在应用根部提供配置好的路由器。forRoot()　方法提供
+  了路由需要的路由服务提供商和指令，并基于当前浏览器URL　初始化导航。
 7. HTTP
+

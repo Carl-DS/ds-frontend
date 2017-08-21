@@ -1,10 +1,14 @@
 import { Component, Injectable } from "@angular/core";
 
-import { Hero } from "./hello";
+import { Hero } from "./hero";
 import { HEROES} from "./mock-heroes";
 
 @Injectable() // 当TypeScript 看到@Injectable 装饰品时, 就会记下本服务的元数据
 export class HeroService {
+  getHero(id: number): Promise<Hero> {
+    return this.getHeroes()
+      .then(heroes => heroes.find(hero => hero.id === id))
+  };
   getHeroes(): Promise<Hero[]> {
     return Promise.resolve(HEROES);
   };
