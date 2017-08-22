@@ -81,3 +81,6 @@ tsconfig.json, Typescript语言的配置文件
   了路由需要的路由服务提供商和指令，并基于当前浏览器URL　初始化导航。
 7. HTTP
 
+  7.1　HttpModule 并不是Angular 的核心模块。它是Angular　用来进行Web　访问的一种可选方式，
+  并位于一个名叫@angular/http 的独立附属模块中。
+  7.2 如果报找不到angular-in-memory-web-api，解决方法：npm i angular-in-memory-web-api
