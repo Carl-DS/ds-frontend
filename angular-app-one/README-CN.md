@@ -56,31 +56,33 @@ tsconfig.json, Typescript语言的配置文件
 
 5. 服务 done 困难
 
-  5.1 @Injectable 导入Angular 的Injectable 函数, 并作为@Injectable() 装饰器使用这个函数
+  * @Injectable 导入Angular 的Injectable 函数, 并作为@Injectable() 装饰器使用这个函数
   
-  5.2 不要忘了写圆括号!
+  * 不要忘了写圆括号!
   
-  5.3 当 TypeScript 看到@Injectable()装饰器时，就会记下本服务的元数据。 如果 Angular 需要往这个服务中注入其它依赖，就会使用这些元数据。
+  * 当 TypeScript 看到@Injectable()装饰器时，就会记下本服务的元数据。 如果 Angular 需要往这个服务中注入其它依赖，就会使用这些元数据。
 
 6. 路由
 
-  6.1 路由定义包括以下部分:
-  * Path: 路由器会用它来匹配浏览器地址栏中的地址, 如heroes.
-  * Component: 导航到此路由时, 路由器需要创建的组件(HeroesComponent)
-  ```
-    import { RouterModule }   from '@angular/router';
+  * 路由定义包括以下部分:
 
-    RouterModule.forRoot([
-      {
-        path: 'heroes',
-        component: HeroesComponent
-      }
-    ])
-  ```
-  * 这里使用了 forRoot() 方法, 因为我们是在应用根部提供配置好的路由器。forRoot()　方法提供
-  了路由需要的路由服务提供商和指令，并基于当前浏览器URL　初始化导航。
+    - Path: 路由器会用它来匹配浏览器地址栏中的地址, 如heroes.
+    - Component: 导航到此路由时, 路由器需要创建的组件(HeroesComponent)
+    ```
+      import { RouterModule }   from '@angular/router';
+
+      RouterModule.forRoot([
+        {
+          path: 'heroes',
+          component: HeroesComponent
+        }
+      ])
+    ```
+
+  * 这里使用了 forRoot() 方法, 因为我们是在应用根部提供配置好的路由器。forRoot()　方法提供了路由需要的路由服务提供商和指令，并基于当前浏览器URL　初始化导航。
+
 7. HTTP
 
-  7.1　HttpModule 并不是Angular 的核心模块。它是Angular　用来进行Web　访问的一种可选方式，
-  并位于一个名叫@angular/http 的独立附属模块中。
-  7.2 如果报找不到angular-in-memory-web-api，解决方法：npm i angular-in-memory-web-api
+* HttpModule 并不是Angular 的核心模块。它是Angular　用来进行Web　访问的一种可选方式，并位于一个名叫@angular/http 的独立附属模块中。
+
+* 如果报找不到angular-in-memory-web-api，解决方法：npm i angular-in-memory-web-api
