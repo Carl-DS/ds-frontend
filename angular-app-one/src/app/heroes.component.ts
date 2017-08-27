@@ -7,7 +7,6 @@ import { HeroService } from "./hero.service";
   selector: 'app-heroes', // 对应该index.html的 <app-root> 标签
   templateUrl: './heroes.component.html', // html 文件路径
   styleUrls: ['./heroes.component.css'], // css 文件路径
-  // providers: [HeroService]
 })
 
 export class HeroesComponent implements OnInit{ // 输出自定义组件

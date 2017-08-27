@@ -7,14 +7,12 @@ import { HttpModule } from '@angular/http'; // HTTP 服务
 // 导入用于加载和配置内存中的web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
-
 import { AppComponent } from './app.component'; // 引用app.component.ts文件, 定义的AppComponent组件
-import { HelloComponent } from './hello/hello.component';
 import { HeroesComponent } from './heroes.component';
 import { HeroDetailComponent } from './hero-detail.component';
 import { HeroSearchComponent } from './hero-search.component';
-import { LinkDirective } from './link.directive';
-import { DatefPipe } from './datef.pipe';
+
+
 import { HeroService } from './hero.service';
 import { DashboardComponent } from './dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -22,9 +20,6 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({ // 定义模块
   declarations: [ // 声明组件
     AppComponent, 
-    HelloComponent, 
-    LinkDirective, 
-    DatefPipe, 
     HeroDetailComponent,
     HeroesComponent,
     DashboardComponent,
@@ -40,7 +35,7 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [
     HeroService
   ],
-  bootstrap: [AppComponent, HelloComponent] // 启动组件
+  bootstrap: [AppComponent] // 启动组件
 })
 
 export class AppModule { // 输出自定义模块
