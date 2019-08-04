@@ -1,4 +1,4 @@
-.vscode/settings.json
+.vscode
 .DS_Store
 .idea/ds-frontend.iml
 .idea/modules.xml
@@ -6,3 +6,4 @@
 .idea/vcs.xml
 .idea/workspace.xml
 angular-app-one/npm-debug.log
+.project
