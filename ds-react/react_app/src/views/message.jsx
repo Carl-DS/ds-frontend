@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import {Route} from 'react-router-dom';
+import {Route, Link, NavLink} from 'react-router-dom';
 import MessageDetail from './message-detail'
+import MyNavLink from "../components/MyNavLink";
 
 export default class Message extends Component {
   state = {
@@ -16,7 +17,23 @@ export default class Message extends Component {
         { id: 5, title: "title05" },
       ];
       this.setState({ messages });
-    }, 500);
+    }, 100);
+  }
+
+  showDetail = (id) => {
+    this.props.history.push(`/home/message/detail/${id}`)
+  }
+
+  showDetail2 = (id) => {
+    this.props.history.replace(`/home/message/detail/${id}`)
+  }
+
+  back = () => {
+    this.props.history.goBack();
+  }
+
+  forward = () => {
+    this.props.history.goForward();
   }
 
   render() {
@@ -26,10 +43,19 @@ export default class Message extends Component {
         <ul>
           {messages.map((m, index) => (
             <li key={index}>
-              <a href={`/home/message/detail/${m.id}`}>{m.title}</a>
+              {/* <a href={`/home/message/detail/${m.id}`}>{m.title}</a> */}
+              {/* <Link to={`/home/message/detail/${m.id}`}>{m.title}</Link> */}
+              {/* <NavLink to={`/home/message/detail/${m.id}`}>{m.title}</NavLink> */}
+              <MyNavLink to={`/home/message/detail/${m.id}`}>{m.title}</MyNavLink>
+              &nbsp;&nbsp; <button onClick={()=>{this.showDetail(m.id)}}>push查看</button>
+              &nbsp;&nbsp; <button onClick={()=>{this.showDetail2(m.id)}}>replace查看</button>
             </li>
           ))}
         </ul>
+        <p>
+          <button onClick={this.back}>回退</button>
+          <button onClick={this.forward}>前进</button>
+        </p>
         <hr/>
         <Route path='/home/message/detail/:id' component={MessageDetail} />
       </>
