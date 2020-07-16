@@ -12,7 +12,6 @@ export default class Counter extends Component {
     count: PropTypes.number.isRequired,
     increment: PropTypes.func.isRequired,
     decrement: PropTypes.func.isRequired,
-    incrementAsync: PropTypes.func.isRequired,
   };
 
   increment = () => {
@@ -42,7 +41,10 @@ export default class Counter extends Component {
   incrementAsync = () => {
     // 1. 得到选择增加数量
     const number = this.select.value * 1;
-    this.props.incrementAsync(number);
+    setTimeout(() => {
+      // 2. 调用 store 的方法更新状态
+      this.props.increment(number);
+    }, 1000);
   };
 
   render() {
