@@ -16,11 +16,24 @@ export default class App extends Component {
   // 不使用构造函数的形式
   // 给组件对象(this)指定 state 属性
   state = {
-    comments: [
-      { username: "Tom", content: "React 挺好的！" },
-      { username: "Jack", content: "React太难了！还是学不会" },
-    ],
+    // comments: [
+    //   { username: "Tom", content: "React 挺好的！" },
+    //   { username: "Jack", content: "React太难了！还是学不会" },
+    // ],
+    comments: [],
   };
+
+  componentdidMount() {
+    // 模拟发送异步ajax 请求，获取数据
+    setTimeout(() => {
+      const comments = [
+        { username: "Tom", content: "React 挺好的！" },
+        { username: "Jack", content: "React太难了！还是学不会" },
+      ];
+      // 更新状态
+      this.setState({ comments });
+    }, 1000);
+  }
 
   // 添加评论
   addComment = (comment) => {
