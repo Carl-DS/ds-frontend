@@ -188,7 +188,9 @@ export const alphaTypes = [
   }
 ];
 
-//排行榜编号
+/**
+ * 排行榜编号
+ */
 export const RankTypes = {
   "0": "云音乐新歌榜",
   "1": "云音乐热歌榜",
@@ -216,20 +218,28 @@ export const RankTypes = {
   "23": "江小白YOLO云音乐说唱榜"
 };
 
-//歌单一页限定歌曲数量
+/**
+ * 歌单一页限定歌曲数量
+ */
 export const ONE_PAGE_COUNT = 50;
 
-//顶部的高度
+/**
+ * 顶部的高度
+ */
 export const HEADER_HEIGHT = 45;
 
-//播放模式
+/**
+ * 播放模式
+ */
 export const playMode = {
   sequence: 0,
   loop: 1,
   random: 2
 };
 
-// 倍速播放配置
+/**
+ * 倍速播放配置
+ */
 export const list = [
   {
     key: 0.75,
