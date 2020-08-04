@@ -11,7 +11,10 @@ import {
 } from "./store/actions";
 import MiniPlayer from "./miniPlayer";
 import NormalPlayer from "./normalPlayer";
-import { getSongUrl, isEmptyObject } from "../../api/utils";
+import PlayList from "./playList"
+import { getSongUrl, isEmptyObject, shuffle, findIndex } from "../../api/utils";
+import Toast from "./../../baseUI/toast/index";
+import { playMode } from "../../api/config";
 
 function Player(props) {
   // 目前播放时间
@@ -38,6 +41,7 @@ function Player(props) {
     changePlayListDispatch, //改变playList
     changeModeDispatch, //改变mode
     toggleFullScreenDispatch,
+    togglePlayListDispatch,
   } = props;
 
   const playList = immutablePlayList.toJS();
@@ -45,87 +49,12 @@ function Player(props) {
   const currentSong = immutableCurrentSong.toJS();
 
   const audioRef = useRef();
+  const songReady = useRef(true);
 
   const clickPlaying = (e, state) => {
     e.stopPropagation();
     togglePlayingDispatch(state);
   };
-
-  //mock一份playList，后面直接从 redux 拿，现在只是为了调试播放效果。
-  const playList = [
-    {
-      ftype: 0,
-      djId: 0,
-      a: null,
-      cd: "01",
-      crbt: null,
-      no: 1,
-      st: 0,
-      rt: "",
-      cf: "",
-      alia: ["手游《梦幻花园》苏州园林版推广曲"],
-      rtUrls: [],
-      fee: 0,
-      s_id: 0,
-      copyright: 0,
-      h: {
-        br: 320000,
-        fid: 0,
-        size: 9400365,
-        vd: -45814,
-      },
-      mv: 0,
-      al: {
-        id: 84991301,
-        name: "拾梦纪",
-        picUrl:
-          "http://p1.music.126.net/M19SOoRMkcHmJvmGflXjXQ==/109951164627180052.jpg",
-        tns: [],
-        pic_str: "109951164627180052",
-        pic: 109951164627180050,
-      },
-      name: "拾梦纪",
-      l: {
-        br: 128000,
-        fid: 0,
-        size: 3760173,
-        vd: -41672,
-      },
-      rtype: 0,
-      m: {
-        br: 192000,
-        fid: 0,
-        size: 5640237,
-        vd: -43277,
-      },
-      cp: 1416668,
-      mark: 0,
-      rtUrl: null,
-      mst: 9,
-      dt: 234947,
-      ar: [
-        {
-          id: 12084589,
-          name: "妖扬",
-          tns: [],
-          alias: [],
-        },
-        {
-          id: 12578371,
-          name: "金天",
-          tns: [],
-          alias: [],
-        },
-      ],
-      pop: 5,
-      pst: 0,
-      t: 0,
-      v: 3,
-      id: 1416767593,
-      publishTime: 0,
-      rurl: null,
-    },
-  ];
 
   //记录当前的歌曲，以便于下次重渲染时比对是否是一首歌
   const [preSong, setPreSong] = useState({});
@@ -139,19 +68,24 @@ function Player(props) {
       !playList.length ||
       currentIndex === -1 ||
       !playList[currentIndex] ||
-      playList[currentIndex].id === preSong.id
+      playList[currentIndex].id === preSong.id ||
+      !songReady.current // 标志位为 false
     )
       return;
     let current = playList[currentIndex];
-    changeCurrentDispatch(current);
     setPreSong(current);
+    songReady.current = false; // 把标志位置为 false, 表示现在新的资源没有缓冲完成，不能切歌
+    changeCurrentDispatch(current);
     audioRef.current.src = getSongUrl(current.id);
     setTimeout(() => {
-      audioRef.current.play();
+      // 注意，play 方法返回的是一个 promise 对象
+      audioRef.current.play().then(() => {
+        songReady.current = true;
+      });
     });
-    togglePlayingDispatch(true);
-    setCurrentTime(0);
-    setDuration((current.dt / 1000) | 0);
+    togglePlayingDispatch(true); // 播放状态
+    setCurrentTime(0); // 从头开始播放
+    setDuration((current.dt / 1000) | 0); // 时长
   }, [playList, currentIndex]);
 
   useEffect(() => {
@@ -203,6 +137,9 @@ function Player(props) {
     changeCurrentIndexDispatch(index);
   };
 
+  const [modeText, setModeText] = useState("");
+  const toastRef = useRef();
+
   const changeMode = () => {
     let newMode = (mode + 1) % 3;
     if (newMode === 0) {
@@ -210,17 +147,34 @@ function Player(props) {
       changePlayListDispatch(sequencePlayList);
       let index = findIndex(currentSong, sequencePlayList);
       changeCurrentIndexDispatch(index);
+      setModeText("顺序循环");
     } else if (newMode === 1) {
       // 单曲循环
       changePlayListDispatch(sequencePlayList);
+      setModeText("单曲循环");
     } else if (newMode === 2) {
       // 随机播放
       let newList = shuffle(sequencePlayList);
       let index = findIndex(currentSong, newList);
       changePlayListDispatch(newList);
       changeCurrentIndexDispatch(index);
+      setModeText("随机播放");
     }
     changeModeDispatch(newMode);
+    toastRef.current.show();
+  };
+
+  const handleEnd = () => {
+    if (mode === playMode.loop) {
+      handleLoop();
+    } else {
+      handleNext();
+    }
+  };
+
+  const handleError = () => {
+    songReady.current = true;
+    alert("播放出错");
   };
 
   return (
@@ -233,6 +187,7 @@ function Player(props) {
           percent={percent}
           setFullScreen={toggleFullScreenDispatch}
           clickPlaying={clickPlaying}
+          togglePlayList={togglePlayListDispatch}
         />
       )}
       {isEmptyObject(currentSong) ? null : (
@@ -248,10 +203,19 @@ function Player(props) {
           onProgressChange={onProgressChange}
           handlePrev={handlePrev}
           handleNext={handleNext}
+          mode={mode}
+          changeMode={changeMode}
+          togglePlayList={togglePlayListDispatch}
         />
       )}
-
-      <audio ref={audioRef} onTimeUpdate={updateTime} />
+      <PlayList></PlayList>
+      <audio
+        ref={audioRef}
+        onTimeUpdate={updateTime}
+        onEnded={handleEnd}
+        onEnded={handleError}
+      />
+      <Toast text={modeText} ref={toastRef}></Toast>
     </div>
   );
 }

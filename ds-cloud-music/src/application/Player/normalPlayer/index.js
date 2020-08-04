@@ -13,11 +13,27 @@ import { CSSTransition } from "react-transition-group";
 import animations from "create-keyframe-animation";
 import { prefixStyle } from "../../../api/utils";
 import ProgressBar from "../../../baseUI/progress-bar/index";
+import { playMode } from "../../../api/config";
 
 function NormalPlayer(props) {
-  const { song, fullScreen, playing, percent, duration, currentTime } = props;
-  const { toggleFullScreen, clickPlaying, onProgressChange, handlePrev, handleNext } = props;
-
+  const {
+    song,
+    fullScreen,
+    playing,
+    percent,
+    duration,
+    currentTime,
+    mode,
+  } = props;
+  const {
+    toggleFullScreen,
+    clickPlaying,
+    onProgressChange,
+    handlePrev,
+    handleNext,
+    changeMode,
+    togglePlayList,
+  } = props;
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
 
@@ -96,6 +112,18 @@ function NormalPlayer(props) {
     normalPlayerRef.current.style.display = "none";
   };
 
+  const getPlayMode = () => {
+    let content;
+    if (mode === playMode.sequence) {
+      content = "&#xe625;";
+    } else if (mode === playMode.loop) {
+      content = "&#xe653;";
+    } else {
+      content = "&#xe61b;";
+    }
+    return content;
+  };
+
   return (
     <CSSTransition
       classNames="normal"
@@ -148,8 +176,11 @@ function NormalPlayer(props) {
             <div className="time time-r">{formatPlayTime(duration)}</div>
           </ProgressWrapper>
           <Operators>
-            <div className="icon i-left">
-              <i className="iconfont">&#xe625;</i>
+            <div className="icon i-left" onClick={changeMode}>
+              <i
+                className="iconfont"
+                dangerouslySetInnerHTML={{ __html: getPlayMode() }}
+              ></i>
             </div>
             <div className="icon i-left" onClick={handlePrev}>
               <i className="iconfont">&#xe6e1;</i>
@@ -166,7 +197,7 @@ function NormalPlayer(props) {
             <div className="icon i-right" onClick={handleNext}>
               <i className="iconfont">&#xe718;</i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={() => togglePlayList(true)}>
               <i className="iconfont">&#xe640;</i>
             </div>
           </Operators>

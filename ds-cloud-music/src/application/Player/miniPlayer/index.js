@@ -8,6 +8,12 @@ function MiniPlayer(props) {
   const { song, fullScreen, playing, percent } = props;
 
   const { clickPlaying, setFullScreen } = props;
+  const { togglePlayList } = props;
+
+  const handleTogglePlayList = (e) => {
+    togglePlayList(true);
+    e.stopPropagation();
+  };
 
   const miniPlayerRef = useRef();
 
@@ -45,9 +51,12 @@ function MiniPlayer(props) {
         <div className="control">
           <ProgressCircle radius={32} percent={percent}>
             {playing ? (
-              <i className="icon-mini iconfont icon-pause"
+              <i
+                className="icon-mini iconfont icon-pause"
                 onClick={(e) => clickPlaying(e, false)}
-              >&#xe650;</i>
+              >
+                &#xe650;
+              </i>
             ) : (
               <i
                 className="icon-mini iconfont icon-play"
@@ -58,7 +67,7 @@ function MiniPlayer(props) {
             )}
           </ProgressCircle>
         </div>
-        <div className="control">
+        <div className="control"onClick={handleTogglePlayList}>
           <i className="iconfont">&#xe640;</i>
         </div>
       </MiniPlayerContainer>

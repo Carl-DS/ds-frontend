@@ -9,10 +9,11 @@ import Scroll from "../../baseUI/scroll/index";
 import SongsList from "../SongsList";
 import { HEADER_HEIGHT } from "./../../api/config";
 import Loading from "./../../baseUI/loading/index";
+import MusicNote from "../../baseUI/music-note/index";
 
 function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
-  const { artist: immutableArtist, songs: immutableSongs, loading } = props;
+  const { artist: immutableArtist, songs: immutableSongs, loading, songsCount } = props;
   const { getSingerDataDispatch } = props;
   const artist = immutableArtist.toJS();
   const songs = immutableSongs.toJS();
@@ -103,6 +104,12 @@ function Singer(props) {
     }
   }, []);
 
+  const musicNoteRef = useRef();
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
+
   return (
     <CSSTransition
       in={showStatus}
@@ -112,7 +119,7 @@ function Singer(props) {
       unmountOnExit
       onExited={() => props.history.goBack()}
     >
-      <Container>
+      <Container play={songsCount}>
         <Header
           handleClick={setShowStatusFalse}
           title={artist.name}
@@ -128,10 +135,15 @@ function Singer(props) {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll onScroll={handleScroll} ref={songScroll}>
-            <SongsList songs={songs} showCollect={false}></SongsList>
+            <SongsList
+              songs={songs}
+              showCollect={false}
+              musicAnimation={musicAnimation}
+            ></SongsList>
           </Scroll>
         </SongListWrapper>
         {loading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );
@@ -142,6 +154,7 @@ const mapStateToProps = (state) => ({
   artist: state.getIn(["singerInfo", "artist"]),
   songs: state.getIn(["singerInfo", "songsOfArtist"]),
   loading: state.getIn(["singerInfo", "loading"]),
+  songsCount: state.getIn (['player', 'playList']).size,// 尽量减少 toJS 操作，直接取 size 属性就代表了 list 的长度
 });
 
 // 映射 dispatch到 props 上

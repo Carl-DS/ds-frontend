@@ -1,20 +1,15 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { getRankList } from './store/index'
-import Loading from '../../baseUI/loading';
-import {
-  List, 
-  ListItem,
-  SongList,
-  Container
-} from './style';
-import Scroll from '../../baseUI/scroll/index';
-import { EnterLoading } from './../Singers/style';
-import { filterIndex, filterIdx } from '../../api/utils';
-import { renderRoutes } from 'react-router-config';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { getRankList } from "./store/index";
+import Loading from "../../baseUI/loading";
+import { List, ListItem, SongList, Container } from "./style";
+import Scroll from "../../baseUI/scroll/index";
+import { EnterLoading } from "./../Singers/style";
+import { filterIndex, filterIdx } from "../../api/utils";
+import { renderRoutes } from "react-router-config";
 
 function Rank(props) {
-  const { rankList: list, loading } = props;
+  const { rankList: list, loading, songsCount } = props;
 
   const { getRankListDataDispatch } = props;
 
@@ -29,7 +24,7 @@ function Rank(props) {
   let globalList = rankList.slice(globalStartIndex);
 
   const enterDetail = (detail) => {
-    props.history.push(`/rank/${detail.id}`)
+    props.history.push(`/rank/${detail.id}`);
   };
 
   // 这是渲染榜单列表函数，传入 global 变量来区分不同的布局方式
@@ -39,7 +34,7 @@ function Rank(props) {
         {list.map((item) => {
           return (
             <ListItem
-              key={item.coverImgId}
+              key={item.id}
               tracks={item.tracks}
               onClick={() => enterDetail(item)}
             >
@@ -74,7 +69,7 @@ function Rank(props) {
   let displayStyle = loading ? { display: "none" } : { display: "" };
 
   return (
-    <Container>
+    <Container play={songsCount}>
       <Scroll>
         <div>
           <h1 className="offical" style={displayStyle}>
@@ -103,6 +98,7 @@ function Rank(props) {
 const mapStateToProps = (state) => ({
   rankList: state.getIn(["rank", "rankList"]),
   loading: state.getIn(["rank", "loading"]),
+  songsCount: state.getIn(["player", "playList"]).size, // 尽量减少 toJS 操作，直接取 size 属性就代表了 list 的长度
 });
 // 映射 dispatch 到 props 上
 const mapDispatchToProps = (dispatch) => {
