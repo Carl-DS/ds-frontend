@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import style from "../../../assets/global-style";
-import disc from './disc.png';
-import needle from './needle.png';
+import disc from "./disc.png";
+import needle from "./needle.png";
 
 const rotate = keyframes`
   0%{
@@ -79,7 +79,7 @@ export const Top = styled.div`
       transform: rotate(90deg);
     }
   }
-  .text{
+  .text {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -132,7 +132,7 @@ export const CDWrapper = styled.div`
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  .needle{
+  .needle {
     position: absolute;
     top: -6.67vw;
     left: 48vw;
@@ -144,7 +144,7 @@ export const CDWrapper = styled.div`
     transform-origin: 4.5vw 4.5vw;
     transition: all 0.3s;
     transform: rotate(0);
-    &.pause{
+    &.pause {
       transform: rotate(-30deg);
     }
   }
@@ -159,8 +159,10 @@ export const CDWrapper = styled.div`
     ${style.bgFull()};
     .image {
       position: absolute;
-      left: 0;right: 0;
-      top: 0;bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
       width: 68%;
       height: 68%;
       margin: auto;
@@ -168,7 +170,7 @@ export const CDWrapper = styled.div`
     }
     .play {
       animation: ${rotate} 20s linear infinite;
-      &.pause{
+      &.pause {
         animation-play-state: paused;
       }
     }
@@ -210,7 +212,7 @@ export const LyricWrapper = styled.div`
     &.current {
       color: #fff;
     }
-    &.pure{
+    &.pure {
       position: relative;
       top: 30vh;
     }
@@ -285,7 +287,7 @@ export const List = styled.div`
   height: 30px;
   justify-content: space-around;
   overflow: hidden;
-  >span:first-of-type{
+  > span:first-of-type {
     display: block;
     flex: 0 0 auto;
     padding: 5px 0;
@@ -293,16 +295,16 @@ export const List = styled.div`
     font-size: ${style["font-size-m"]};
     vertical-align: middle;
   }
-`
+`;
 export const ListItem = styled.span`
   flex: 0 0 auto;
   font-size: ${style["font-size-m"]};
   padding: 5px 5px;
   border-radius: 10px;
   color: ${style["font-color-desc-v2"]};
-  &.selected{
+  &.selected {
     color: ${style["theme-color"]};
     border: 1px solid ${style["theme-color"]};
     opacity: 0.8;
   }
-`
+`;

@@ -67,12 +67,15 @@ function PlayList(props) {
   const changeMode = (e) => {
     let newMode = (mode + 1) % 3;
     if (newMode === 0) {
+      // 顺序模式
       changePlayListDispatch(sequencePlayList);
       let index = findIndex(currentSong, sequencePlayList);
       changeCurrentIndexDispatch(index);
     } else if (newMode === 1) {
+      // 单曲循环
       changePlayListDispatch(sequencePlayList);
     } else if (newMode === 2) {
+      // 随机播放
       let newList = shuffle(sequencePlayList);
       let index = findIndex(currentSong, newList);
       changePlayListDispatch(newList);
@@ -87,6 +90,7 @@ function PlayList(props) {
   };
 
   const handleScroll = (pos) => {
+    // 只有当内容偏移量为 0 的时候才能下滑关闭 PlayList。否则一边内容在移动，一边列表在移动，出现 bug
     let state = pos.y === 0;
     setCanTouch(state);
   };
@@ -281,7 +285,7 @@ const mapStateToProps = (state) => ({
   currentIndex: state.getIn(["player", "currentIndex"]),
   currentSong: state.getIn(["player", "currentSong"]),
   playList: state.getIn(["player", "playList"]),
-  sequencePlayList: state.getIn(["player", "sequencePlayList"]),
+  sequencePlayList: state.getIn(["player", "sequencePlayList"]),// 顺序排列时的播放列表
   showPlayList: state.getIn(["player", "showPlayList"]),
   mode: state.getIn(["player", "mode"]),
 });
@@ -291,12 +295,15 @@ const mapDispatchToProps = (dispatch) => {
     togglePlayListDispatch(data) {
       dispatch(changeShowPlayList(data));
     },
+    // 修改当前歌曲在列表中的 index,也就是切歌
     changeCurrentIndexDispatch(data) {
       dispatch(changeCurrentIndex(data));
     },
+    // 修改当前的播放模式
     changeModeDispatch(data) {
       dispatch(changePlayMode(data));
     },
+    // 修改当前的歌曲列表
     changePlayListDispatch(data) {
       dispatch(changePlayList(data));
     },
@@ -304,11 +311,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(deleteSong(data));
     },
     clearDispatch() {
+      // 1.清空两个列表
       dispatch(changePlayList([]));
       dispatch(changeSequecePlayList([]));
+      // 2. 初始化 currentIndex
       dispatch(changeCurrentIndex(-1));
+      // 3. 关闭 PlayList的显示
       dispatch(changeShowPlayList(false));
+      // 4. 将当前歌曲置空
       dispatch(changeCurrentSong({}));
+      // 5. 重置播放状态
       dispatch(changePlayingState(false));
     },
   };
