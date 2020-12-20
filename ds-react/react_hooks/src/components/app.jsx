@@ -1,4 +1,5 @@
 import React, { useState, useContext, useReducer, useEffect } from "react";
+import useQueryString from './useQueryString';
 
 const myReducer = (state, action) => {
   switch (action.type) {
@@ -114,6 +115,7 @@ export default function App() {
   };
   const Person = ({ personId }) => {
     const [loading, person] = usePerson({personId});
+    console.log(useQueryString("http://tstyun.shanghaiairport.com/extends/officed/statics/#/245347153407385600?query=ZXh0X3VzZXJpZD3mpbzkuIDpuKMmZXh0X3VzZXJuYW1lPealvOS4gOm4oyZ3cml0ZT0xJnRyYWNrPTQmdGltZXN0YW1wPTE2MDM1MjMyOTI5NTQmZmlsZV9pZD0yNDUzNDcxNTM0MDczODU2MDAmc2l0ZV91bmlxdWVfY29kZT1qY2p0&hash=2B52213229"))
     if (loading) {
       return <span>loading...</span>;
     }
